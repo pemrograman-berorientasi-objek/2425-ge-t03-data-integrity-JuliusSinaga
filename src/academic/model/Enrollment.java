@@ -11,7 +11,7 @@ public class Enrollment {
     private String academicYear;
     private String grade;
 
-    public Enrollment(Student _student, Course _course, String _semester, String _academicYear) {
+    public Enrollment(Course _course,Student _student , String _semester, String _academicYear) {
     student = _student;
     course = _course;
     this.semester = _semester;
@@ -41,7 +41,7 @@ public class Enrollment {
 
     @Override
     public String toString() {
-        return student.getId() + "|" + course.getKodeMatkul() + "|" + academicYear + "|" + semester + "|" + grade;
+        return course.getKodeMatkul() + "|" + student.getId() + "|" + academicYear + "|" + semester + "|" + grade;
     }
 
 }

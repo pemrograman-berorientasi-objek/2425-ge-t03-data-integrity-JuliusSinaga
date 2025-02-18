@@ -5,8 +5,8 @@ import java.util.Scanner;
 import academic.model.*;
 
 /**
- * @author 12S23005 Ariella Sihombing
- * @author 12S23035 Julius Sinaga
+ * @autors 12S23005 Ariella Sihombing
+ * @autors 12S23035 Julius Sinaga
  */
 public class Driver1 {
 
@@ -16,6 +16,8 @@ public class Driver1 {
         ArrayList<Student> students = new ArrayList<Student>();
         ArrayList<Enrollment> enrollments = new ArrayList<Enrollment>();
         boolean isSame = false;
+        Student studentTemp = null;
+        Course courseTemp = null;
 
         while (scan.hasNext()) {
             isSame = false;
@@ -69,38 +71,51 @@ public class Driver1 {
                     students.add(student);
                 }
             } else if(inputTemp[0].equals("enrollment-add")) {
-                String idStudent = inputTemp[1];
-                String kodeMatkul = inputTemp[2];
+                String kodeMatkul = inputTemp[1];
+                String idStudent = inputTemp[2];
                 String academicYear = inputTemp[3];
                 String semester = inputTemp[4];
-                // cek student dan course
+                boolean isStudent = false, isCourse = false;
+                
+                // Untuk pengecekan dulu baru keluaran invalid ketika semua nya sudah tidak ada
                 for(Student student : students) {
                     if(student.getId().equals(idStudent)) {
-                        for(Course course : courses) {
-                            if(course.getKodeMatkul().equals(kodeMatkul)) {
-                                // jika student dan course sudah ada maka Enrollment dapat dilakukan
-                                // Membuat objek enrollment
-                                Enrollment enrollment = new Enrollment(student, course, semester, academicYear);
-                                // Menambahkan enrollment ke dalam arraylist
-                                enrollments.add(enrollment);                              
-                            } else {
-                                System.out.println("invalid course|" + idStudent);
-                            }
-                        }
-                    } else {
-                        System.out.println("invalid student|" + kodeMatkul);
-                } 
+                        isStudent = true;
+                        studentTemp = student;
+                        break;   
+                    }
+                }
+                for(Course course : courses) {
+                    if(course.getKodeMatkul().equals(kodeMatkul)) {
+                        isCourse = true;
+                        courseTemp = course;
+                        break;
+                    }
+                }
+                if(!isCourse){
+                    System.out.println("invalid course|" + kodeMatkul);
+                    continue;
+                }
+                if(!isStudent){
+                    System.out.println("invalid student|" + idStudent);
+                    continue;
+                }
+                if(isCourse && isStudent){
+                    // Membuat objek enrollment
+                    Enrollment enrollment = new Enrollment(courseTemp, studentTemp, semester ,academicYear);
+                    // Menambahkan enrollment ke dalam arraylist
+                    enrollments.add(enrollment);
                 }
             }
         }
 
-        // Menampilkan course
+        // Menampilkan course dengan perulangan decrement
         for(int i = courses.size() - 1; i >= 0; i--) {
             System.out.println(courses.get(i).toString());
         }
         // Menampilkan student
-        for(int i = students.size() - 1; i >= 0; i--) {
-            System.out.println(students.get(i).toString());
+        for(Student student : students) {
+            System.out.println(student.toString());
         }
         // Menampilkan enrollment
         for(Enrollment enrollment : enrollments) {
